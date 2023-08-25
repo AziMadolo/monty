@@ -1,16 +1,16 @@
 #include "monty.h"
 
 /**
- * execute_opcode - executes the corresponding opcode function
- * @stack: pointer to the head of the stack
- * @counter: line counter
- * @file: pointer to the Monty file
- * @content: line content
- * Return: 0 if successful, 1 if opcode not found
+ * execute - Executes the opcode.
+ * @content: Line content from the Monty file.
+ * @stack: Head of the linked list - stack.
+ * @counter: Line counter.
+ * @file: Pointer to the Monty file.
+ * Return: No return value.
  */
-int execute_opcode(char *content, stack_t **stack, unsigned int counter, FILE *file)
+int execute(char *content, stack_t **stack, unsigned int counter, FILE *file)
 {
-    instruction_t opcode_list[] = {
+    instruction_t opst[] = {
         {"push", f_push}, {"pall", f_pall}, {"pint", f_pint},
         {"pop", f_pop},
         {"swap", f_swap},
@@ -28,34 +28,40 @@ int execute_opcode(char *content, stack_t **stack, unsigned int counter, FILE *f
         {"stack", f_stack},
         {NULL, NULL}
     };
-
     unsigned int i = 0;
-    char *opcode;
+    char *op;
 
-    opcode = strtok(content, " \n\t");
-    if (opcode && opcode[0] == '#')
-        return 0;
+    /* Tokenize the content to extract the opcode */
+    op = strtok(content, " \n\t");
 
+    /* Ignore lines starting with # */
+    if (op && op[0] == '#')
+        return (0);
+
+    /* Tokenize the content to extract the argument */
     bus.arg = strtok(NULL, " \n\t");
 
-    while (opcode_list[i].opcode && opcode)
+    /* Iterate through the opcode list to find a match */
+    while (opst[i].opcode && op)
     {
-        if (strcmp(opcode, opcode_list[i].opcode) == 0)
+        if (strcmp(op, opst[i].opcode) == 0)
         {
-            opcode_list[i].f(stack, counter);
-            return 0;
+            /* Execute the opcode function associated with the opcode */
+            opst[i].f(stack, counter);
+            return (0);
         }
         i++;
     }
 
-    if (opcode && opcode_list[i].opcode == NULL)
+    /* If opcode is not found, print error message and exit */
+    if (op && opst[i].opcode == NULL)
     {
-        fprintf(stderr, "L%d: unknown instruction %s\n", counter, opcode);
+        fprintf(stderr, "L%d: unknown instruction %s\n", counter, op);
         fclose(file);
         free(content);
         free_stack(*stack);
         exit(EXIT_FAILURE);
     }
 
-    return 1;
+    return (1);
 }

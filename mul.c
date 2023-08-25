@@ -1,32 +1,38 @@
 #include "monty.h"
-/**
- * multiply_top_two - multiplies the top two elements of the stack.
- * @stk_head: pointer to the stack head
- * @line_num: line number in the file
- * Return: no return
-*/
-void multiply_top_two(stack_t **stk_head, unsigned int line_num)
-{
-	stack_t *stk_ptr;
-	int stack_length = 0, result;
 
-	stk_ptr = *stk_head;
-	while (stk_ptr)
-	{
-		stk_ptr = stk_ptr->next;
-		stack_length++;
-	}
-	if (stack_length < 2)
-	{
-		fprintf(stderr, "L%d: Unable to perform multiplication, insufficient stack elements\n", line_num);
-		fclose(bus.file);
-		free(bus.content);
-		free_stack(*stk_head);
-		exit(EXIT_FAILURE);
-	}
-	stk_ptr = *stk_head;
-	result = stk_ptr->next->n * stk_ptr->n;
-	stk_ptr->next->n = result;
-	*stk_head = stk_ptr->next;
-	free(stk_ptr);
+/**
+ * f_mul - Multiplies the top two elements of the stack.
+ * @head: Pointer to the stack's head
+ * @counter: Line number in the script
+ * 
+ * Description: This function multiplies the values of the top two elements
+ *              of the stack. The result is stored in the second element,
+ *              and the first element is removed from the stack.
+ *              If the stack doesn't have at least two elements, an error
+ *              message is printed, and the program exits with failure.
+ */
+void f_mul(stack_t **head, unsigned int counter)
+{
+    stack_t *h;
+    int len = 0, aux;
+
+    h = *head;
+    while (h)
+    {
+        h = h->next;
+        len++;
+    }
+    if (len < 2)
+    {
+        fprintf(stderr, "L%d: can't mul, stack too short\n", counter);
+        fclose(bus.file);
+        free(bus.content);
+        free_stack(*head);
+        exit(EXIT_FAILURE);
+    }
+    h = *head;
+    aux = h->next->n * h->n;
+    h->next->n = aux;
+    *head = h->next;
+    free(h);
 }

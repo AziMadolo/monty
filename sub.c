@@ -1,36 +1,36 @@
 #include "monty.h"
 
 /**
- * subtract_top_two - Subtracts the top two elements of the stack.
- * @stack: Pointer to the stack's top.
- * @line_number: Line number in the Monty bytecode file.
+ * f_sub - Subtracts the top element of the stack from the second top element
+ * @head: Pointer to the stack's head
+ * @counter: Line number
+ *
+ * Return: No return value
  */
-void subtract_top_two(stack_t **stack, unsigned int line_number)
+void f_sub(stack_t **head, unsigned int counter)
 {
-    stack_t *temp;
-    int result, num_elements;
+    stack_t *aux;
+    int sus, nodes;
 
-    temp = *stack;
-    num_elements = 0;
+    aux = *head;
 
-    while (temp != NULL)
+    /* Count the number of nodes in the stack */
+    for (nodes = 0; aux != NULL; nodes++)
+        aux = aux->next;
+
+    /* Check if there are at least 2 nodes for subtraction */
+    if (nodes < 2)
     {
-        num_elements++;
-        temp = temp->next;
-    }
-
-    if (num_elements < 2)
-    {
-        fprintf(stderr, "L%d: cannot perform subtraction, stack has too few elements\n", line_number);
+        fprintf(stderr, "L%d: can't sub, stack too short\n", counter);
         fclose(bus.file);
         free(bus.content);
-        free_stack(*stack);
+        free_stack(*head);
         exit(EXIT_FAILURE);
     }
 
-    temp = *stack;
-    result = temp->next->n - temp->n;
-    temp->next->n = result;
-    *stack = temp->next;
-    free(temp);
+    aux = *head;
+    sus = aux->next->n - aux->n;
+    aux->next->n = sus;
+    *head = aux->next;
+    free(aux);
 }

@@ -1,40 +1,44 @@
 #include "monty.h"
-
 /**
- * perform_division - Divides the top two elements of the stack.
- * @head_ref: Pointer to the stack's head
- * @line_num: Line number of the operation
- * Return: No explicit return
- */
-void perform_division(stack_t **head_ref, unsigned int line_num) {
-    stack_t *temp;
-    int stack_size = 0, result;
+ * f_div - Divides the second element by the top element of the stack.
+ * @head: Pointer to the head of the stack
+ * @counter: Line number being executed
+ * Return: No return value
+*/
+void f_div(stack_t **head, unsigned int counter)
+{
+    stack_t *h;
+    int len = 0, aux;
 
-    temp = *head_ref;
-    while (temp) {
-        temp = temp->next;
-        stack_size++;
+    h = *head;
+    /* Count the number of elements in the stack */
+    while (h)
+    {
+        h = h->next;
+        len++;
     }
-
-    if (stack_size < 2) {
-        fprintf(stderr, "L%d: Insufficient elements to perform division\n", line_num);
+    /* Check if there are at least two elements in the stack */
+    if (len < 2)
+    {
+        fprintf(stderr, "L%d: can't div, stack too short\n", counter);
         fclose(bus.file);
         free(bus.content);
-        free_stack(*head_ref);
+        free_stack(*head);
         exit(EXIT_FAILURE);
     }
-
-    temp = *head_ref;
-    if (temp->n == 0) {
-        fprintf(stderr, "L%d: Division by zero\n", line_num);
+    h = *head;
+    /* Check for division by zero */
+    if (h->n == 0)
+    {
+        fprintf(stderr, "L%d: division by zero\n", counter);
         fclose(bus.file);
         free(bus.content);
-        free_stack(*head_ref);
+        free_stack(*head);
         exit(EXIT_FAILURE);
     }
-
-    result = temp->next->n / temp->n;
-    temp->next->n = result;
-    *head_ref = temp->next;
-    free(temp);
+    /* Perform the division and update the stack */
+    aux = h->next->n / h->n;
+    h->next->n = aux;
+    *head = h->next;
+    free(h);
 }

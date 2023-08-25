@@ -1,25 +1,26 @@
 #include "monty.h"
-/**
- * print_string_from_stack - prints the string from the top of the stack,
- * followed by a newline
- * @stack: pointer to the stack
- * @line_number: line number in the script
- * Return: No return value
- */
-void print_string_from_stack(stack_t **stack, unsigned int line_number)
-{
-	stack_t *current_node;
-	(void)line_number;
 
-	current_node = *stack;
-	while (current_node)
-	{
-		if (current_node->n > 127 || current_node->n <= 0)
-		{
-			break;
-		}
-		printf("%c", current_node->n);
-		current_node = current_node->next;
-	}
-	printf("\n");
+/**
+ * f_pstr - Prints the string starting at the top of the stack as characters.
+ *         - Stops when encountering a non-printable character or end of stack.
+ * @head: Pointer to the stack's head.
+ * @counter: Line number where the function is called.
+ * Return: No return value.
+ */
+void f_pstr(stack_t **head, unsigned int counter)
+{
+    stack_t *h;
+    (void)counter;
+
+    h = *head;
+    while (h)
+    {
+        if (h->n > 127 || h->n <= 0) /* Stop if non-printable or negative value */
+        {
+            break;
+        }
+        printf("%c", h->n); /* Print the character value */
+        h = h->next;
+    }
+    printf("\n"); /* Print a newline after printing the characters */
 }

@@ -1,51 +1,50 @@
 #include "monty.h"
 
 /**
- * enqueue_operation - Marks the stack as a queue (not implemented here)
- * @stack: Pointer to the stack
- * @line_number: Line number in the script
+ * f_queue - Sets the queue mode flag
+ * @head: Pointer to the head of the stack
+ * @counter: Line number
+ * Return: No return value
  */
-void enqueue_operation(stack_t **stack, unsigned int line_number)
+void f_queue(stack_t **head, unsigned int counter)
 {
-    (void)stack;
-    (void)line_number;
-    bus.lifi = 1;  // Emulating setting queue mode
+    (void)head;
+    (void)counter;
+    bus.lifi = 1; /* Set the queue mode flag */
 }
 
 /**
- * enqueue_value - Adds a new node to the end of the stack (queue mode)
- * @stack: Pointer to the stack
- * @value: Value to be added
+ * addqueue - Adds a node to the tail of the stack (queue mode)
+ * @n: New value to be added
+ * @head: Pointer to the head of the stack
+ * Return: No return value
  */
-void enqueue_value(stack_t **stack, int value)
+void addqueue(stack_t **head, int n)
 {
-    stack_t *new_node, *current;
+    stack_t *new_node, *aux;
 
-    current = *stack;
+    aux = *head;
     new_node = malloc(sizeof(stack_t));
     if (new_node == NULL)
     {
-        fprintf(stderr, "Error: Memory allocation failed\n");
-        exit(EXIT_FAILURE);
+        printf("Error\n"); /* Error message for memory allocation failure */
     }
-
-    new_node->n = value;
+    new_node->n = n;
     new_node->next = NULL;
-
-    if (current)
+    if (aux)
     {
-        while (current->next)
-            current = current->next;
+        while (aux->next)
+            aux = aux->next;
     }
-
-    if (!current)
+    if (!aux)
     {
-        *stack = new_node;
+        *head = new_node; /* Set new node as the head */
         new_node->prev = NULL;
     }
     else
     {
-        current->next = new_node;
-        new_node->prev = current;
+        aux->next = new_node; /* Add new node to the end of the stack */
+        new_node->prev = aux;
     }
 }
+

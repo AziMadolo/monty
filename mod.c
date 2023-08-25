@@ -1,44 +1,49 @@
 #include "monty.h"
 
 /**
- * custom_mod - Calculate the remainder of the division of the second top element
- *              of the stack by the top element of the stack.
- * @stk_head: Pointer to the head of the stack.
- * @line_num: Line number in the Monty file being processed.
+ * f_mod - Computes the rest of the division of the second
+ *         top element of the stack by the top element of the stack.
+ * @head: Pointer to the stack head.
+ * @counter: Line number.
+ * Return: No return value.
  */
-void custom_mod(stack_t **stk_head, unsigned int line_num)
+void f_mod(stack_t **head, unsigned int counter)
 {
-    stack_t *current;
-    int stack_len = 0, temp_value;
+    stack_t *h;
+    int len = 0, aux;
 
-    current = *stk_head;
-    while (current)
+    h = *head;
+    /* Calculate the length of the stack */
+    while (h)
     {
-        current = current->next;
-        stack_len++;
+        h = h->next;
+        len++;
     }
 
-    if (stack_len < 2)
+    /* Check if there are at least 2 elements in the stack */
+    if (len < 2)
     {
-        fprintf(stderr, "L%d: Unable to perform mod, stack is too short\n", line_num);
+        fprintf(stderr, "L%d: can't mod, stack too short\n", counter);
         fclose(bus.file);
         free(bus.content);
-        free_stack(*stk_head);
+        free_stack(*head);
         exit(EXIT_FAILURE);
     }
 
-    current = *stk_head;
-    if (current->n == 0)
+    h = *head;
+    /* Check if division by zero is attempted */
+    if (h->n == 0)
     {
-        fprintf(stderr, "L%d: Division by zero\n", line_num);
+        fprintf(stderr, "L%d: division by zero\n", counter);
         fclose(bus.file);
         free(bus.content);
-        free_stack(*stk_head);
+        free_stack(*head);
         exit(EXIT_FAILURE);
     }
 
-    temp_value = current->next->n % current->n;
-    current->next->n = temp_value;
-    *stk_head = current->next;
-    free(current);
+    /* Perform the modulo operation */
+    aux = h->next->n % h->n;
+    h->next->n = aux;
+    *head = h->next;
+    free(h);
 }

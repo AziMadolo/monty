@@ -1,15 +1,19 @@
 #include "monty.h"
 
 /**
- * customStackFunction - handles stack operation
- * @stack: pointer to the stack
- * @lineNum: line number
- * Description: This function performs a custom stack operation.
+ * f_stack - This function does something with the stack.
+ * @head: Pointer to the stack head.
+ * @counter: Line number.
  * Return: No return value.
  */
-void customStackFunction(stack_t **stack, unsigned int lineNum)
+void f_stack(stack_t **head, unsigned int counter)
 {
-    (void)stack;
-    (void)lineNum;
-    specialStruct.varValue = 0;
+    /* Do something with the stack. */
+    
+    (void)head;      /* Unused parameter. */
+    (void)counter;   /* Unused parameter. */
+    
+    /* Update a variable to 0. */
+    bus.lifi = 0;
 }
+

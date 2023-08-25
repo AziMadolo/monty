@@ -1,25 +1,35 @@
 #include "monty.h"
 
 /**
- * custom_push - Adds an element to the stack
- * @head: Pointer to the stack's top
- * @counter: Line number in the script
- * Return: No explicit return
+ * f_push - Function to add a node to the stack
+ * @head: Pointer to the stack's head
+ * @counter: Line number in the input file
+ * Description: This function adds a new node containing a given integer
+ *              to the top of the stack or queue, depending on 'bus.lifi'.
+ *              If the argument is not a valid integer, it exits with an error.
+ *              If no argument is provided, it exits with an error.
+ * Return: No return value
  */
-void custom_push(stack_t **head, unsigned int counter)
+void f_push(stack_t **head, unsigned int counter)
 {
-    int num, idx = 0, invalid = 0;
+    int n, j = 0, flag = 0;
 
+    /* Check if there is an argument provided*/
     if (bus.arg)
     {
+        /* Check for negative number */
         if (bus.arg[0] == '-')
-            idx++;
-        for (; bus.arg[idx] != '\0'; idx++)
+            j++;
+
+        /* Check if the argument is a valid integer */
+        for (; bus.arg[j] != '\0'; j++)
         {
-            if (bus.arg[idx] > '9' || bus.arg[idx] < '0')
-                invalid = 1;
+            if (bus.arg[j] > 57 || bus.arg[j] < 48)
+                flag = 1;
         }
-        if (invalid == 1)
+
+        /* If argument is not a valid integer, exit with an error */
+        if (flag == 1)
         {
             fprintf(stderr, "L%d: usage: push integer\n", counter);
             fclose(bus.file);
@@ -30,6 +40,7 @@ void custom_push(stack_t **head, unsigned int counter)
     }
     else
     {
+        /* If no argument is provided, exit with an error */
         fprintf(stderr, "L%d: usage: push integer\n", counter);
         fclose(bus.file);
         free(bus.content);
@@ -37,14 +48,12 @@ void custom_push(stack_t **head, unsigned int counter)
         exit(EXIT_FAILURE);
     }
 
-    num = atoi(bus.arg);
+    /* Convert argument to integer */
+    n = atoi(bus.arg);
 
+    /* Add node to the stack or queue based on 'bus.lifi' */
     if (bus.lifi == 0)
-    {
-        push_stack(head, num);
-    }
+        addnode(head, n);
     else
-    {
-        enqueue_stack(head, num);
-    }
+        addqueue(head, n);
 }
